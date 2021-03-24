@@ -10,8 +10,15 @@ const app = express();
 
 // set an array for the default items in the list
 let items = ["Buy Food", "Prepare Food", "Cook Food", "Eat Food"];
+
 // set an empty array for new work items
 let workItems = ["Show Up", "Get Settled"];
+
+// set an array for the default items in the fun list
+let funItems = ["Watching TV", "Playing Tourist"];
+
+// set an array for the default items in the weekend list
+let weekendItems = ["Mowing the Lawn", "Shopping"];
 
 // set EJS as the viewing engine to display html
 app.set('view engine', 'ejs');
@@ -30,20 +37,31 @@ app.get("/", function(req, res) {
     
     // use EJS render to display the day and the To Do List
     res.render("list", {listTitle: day, newListItems: items});
-    
+    res.render("list", {listTitle: "Work Items To-Do List", newListitems: workitems });
+    res.render("list", {listTitle: "Fun Items To-Do List", newListitems: funitems });
+    res.render("list", {listTitle: "Weekend Items To-Do List", newListitems: weekenditems });
 });
 
 // display default to do list on the default root folder
 app.post("/", function(req, res) {
     
     
-    // code allows items to be added to the regular list and work list
+    // code allows items to be added to the regular, work, fun, or weekend lists
     let item = req.body.newItem;
     
     if (req.body.list === "Work") {
         workItems.push(item);
         res.redirect("/work");
-    } else {
+    } 
+    else if (req.body.list === "Fun") {
+        funItems.push(item);
+        res.redirect("/fun");
+    }
+    else if (req.body.list === "Weekend") {
+        weekendItems.push(item);
+        res.redirect("/weekend");
+    }
+    else {
         items.push(item);
         res.redirect("/");
     }
@@ -52,6 +70,14 @@ app.post("/", function(req, res) {
 // display default to do list on the localhost:3000/work route!
 app.get("/work", function(req, res){
     res.render("list", {listTitle: "Work To Do List", newListItems: workItems})
+});
+// display default to do list on the localhost:3000/fun route!
+app.get("/fun", function(req, res){
+    res.render("list", {listTitle: "Fun List", newListItems: funItems})
+});
+// display defualt to do list on the localhost:3000/weekend route!
+app.get("/weekend", function(req, res){
+    res.render("list", {listTitle: "Weekend List", newListItems: weekendItems})
 });
 
 app.listen(3000, function() {
